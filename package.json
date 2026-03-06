@@ -1,5 +1,5 @@
 {
-  "name": "siparis-makinesi-temp",
+  "name": "siparis-makinesi-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "firebase": "^12.10.0",
+    "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-google-recaptcha-v3": "^1.11.0",
+    "recharts": "^3.7.0",
+    "resend": "^6.9.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
