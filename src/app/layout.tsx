@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { generateSEOMetadata } from "@/lib/metadata";
+import {
+  createLocalBusinessSchema,
+  createOrganizationSchema,
+  createWebsiteSchema,
+  generateSEOMetadata,
+} from "@/lib/metadata";
 import JsonLd from "@/components/seo/JsonLd";
 
 const inter = Inter({
@@ -23,7 +28,13 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-content">
           İçeriğe geç
         </a>
-        <JsonLd />
+        <JsonLd
+          data={[
+            createWebsiteSchema(),
+            createOrganizationSchema(),
+            createLocalBusinessSchema(),
+          ]}
+        />
         {children}
       </body>
     </html>

@@ -1,20 +1,55 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import JsonLd from "@/components/seo/JsonLd";
 import {
   SOFTWARE_PRODUCTS,
   HARDWARE_PRODUCTS,
+  ALL_PRODUCTS,
 } from "@/lib/products";
 import { Monitor, Code, ArrowRight } from "lucide-react";
+import {
+  createBreadcrumbSchema,
+  createCollectionPageSchema,
+  createWebPageSchema,
+  generateSEOMetadata,
+} from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Ürünler — Sipariş Makinesi | Yazılım & Donanım Çözümleri",
+export const metadata: Metadata = generateSEOMetadata({
+  path: "/urunler",
+  title: "Ürünler | Restoran Yazılımı ve Donanım Çözümleri",
   description:
-    "Sipariş Makinesi yazılım ve donanım ürünlerini keşfedin. POS terminali, QR menü, mutfak ekranı, stok takibi ve daha fazlası.",
-};
+    "Sipariş Makinesi yazılım ve donanım ürünlerini keşfedin. QR menü, sipariş yönetimi, raporlama, online sipariş entegrasyonu ve restoran donanımları tek çatı altında.",
+  keywords: [
+    "restoran ürünleri",
+    "restoran yazılım çözümleri",
+    "restoran donanım çözümleri",
+  ],
+});
 
 export default function UrunlerPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          createWebPageSchema({
+            title: "Ürünler | Restoran Yazılımı ve Donanım Çözümleri",
+            description:
+              "Sipariş Makinesi yazılım ve donanım ürünlerini keşfedin. QR menü, sipariş yönetimi, raporlama, online sipariş entegrasyonu ve restoran donanımları tek çatı altında.",
+            path: "/urunler",
+          }),
+          createBreadcrumbSchema([
+            { name: "Ana Sayfa", path: "/" },
+            { name: "Ürünler", path: "/urunler" },
+          ]),
+          createCollectionPageSchema({
+            title: "Sipariş Makinesi Ürünler",
+            description:
+              "Restoran operasyonlarını dijitalleştiren yazılım ve donanım ürünleri listesi.",
+            path: "/urunler",
+            items: ALL_PRODUCTS,
+          }),
+        ]}
+      />
       {/* Hero */}
       <section className="pt-28 pb-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">

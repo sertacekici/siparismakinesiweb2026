@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import JsonLd from "@/components/seo/JsonLd";
 import { ALL_PRODUCTS, SOFTWARE_PRODUCTS, HARDWARE_PRODUCTS } from "@/lib/products";
 import { CheckCircle, ArrowLeft, ArrowRight } from "lucide-react";
 import SiparisYonetimiContent from "@/components/sections/SiparisYonetimiContent";
@@ -14,6 +15,12 @@ import YazarkasaPosContent from "@/components/sections/YazarkasaPosContent";
 import PosTerminaliContent from "@/components/sections/PosTerminaliContent";
 import OdemeTerminaliContent from "@/components/sections/OdemeTerminaliContent";
 import DigerDonanimContent from "@/components/sections/DigerDonanimContent";
+import {
+  createBreadcrumbSchema,
+  createProductSchema,
+  createWebPageSchema,
+  generateSEOMetadata,
+} from "@/lib/metadata";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -27,10 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = ALL_PRODUCTS.find((p) => p.slug === slug);
   if (!product) return {};
-  return {
-    title: `${product.name} — Sipariş Makinesi`,
-    description: product.shortDescription,
-  };
+  return generateSEOMetadata({
+    path: `/urunler/${product.slug}`,
+    title: `${product.name} | Sipariş Makinesi`,
+    description: product.description,
+    keywords: [product.name.toLowerCase(), product.shortDescription],
+  });
 }
 
 export default async function ProductDetailPage({ params }: Props) {
@@ -51,6 +60,21 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          createWebPageSchema({
+            title: `${product.name} | Sipariş Makinesi`,
+            description: product.description,
+            path: `/urunler/${product.slug}`,
+          }),
+          createBreadcrumbSchema([
+            { name: "Ana Sayfa", path: "/" },
+            { name: "Ürünler", path: "/urunler" },
+            { name: product.name, path: `/urunler/${product.slug}` },
+          ]),
+          createProductSchema(product),
+        ]}
+      />
       {/* Breadcrumb */}
       <section className="pt-24 pb-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
