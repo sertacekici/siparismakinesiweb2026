@@ -9,6 +9,7 @@ import {
   generateSEOMetadata,
 } from "@/lib/metadata";
 import JsonLd from "@/components/seo/JsonLd";
+import CookieConsentBanner from "@/components/layout/CookieConsentBanner";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           ]}
         />
         {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );

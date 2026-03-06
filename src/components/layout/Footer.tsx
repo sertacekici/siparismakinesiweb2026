@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
 import { SOFTWARE_PRODUCTS, HARDWARE_PRODUCTS } from "@/lib/products";
+import CookiePreferencesButton from "@/components/layout/CookiePreferencesButton";
 
 const quickLinks = [
   { href: "/urunler", label: "Ürünler" },
@@ -142,6 +143,13 @@ export default function Footer() {
             >
               KVKK
             </Link>
+            <Link
+              href="/cerez-politikasi"
+              className="text-xs text-muted-foreground hover:text-secondary transition-colors duration-200"
+            >
+              Çerez Politikası
+            </Link>
+            <CookiePreferencesButton />
           </div>
         </div>
       </div>
