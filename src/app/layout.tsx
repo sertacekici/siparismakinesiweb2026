@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import {
   createLocalBusinessSchema,
   createOrganizationSchema,
   createWebsiteSchema,
+  defaultViewport,
   generateSEOMetadata,
 } from "@/lib/metadata";
 import JsonLd from "@/components/seo/JsonLd";
@@ -16,6 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = generateSEOMetadata();
+export const viewport: Viewport = defaultViewport;
 
 export default function RootLayout({
   children,

@@ -1,9 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { FAQ_ITEMS, SITE_CONFIG } from "@/lib/constants";
 import type { Product } from "@/lib/products";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url || "https://siparismakinesi.com";
+
+export const defaultViewport: Viewport = {
+  themeColor: "#ffffff",
+  colorScheme: "light",
+};
 
 const defaultTitle =
   "Sipariş Makinesi | Restoran Otomasyon Sistemi, QR Menü ve POS Çözümleri";
@@ -60,11 +65,26 @@ export function generateSEOMetadata({
     title,
     description,
     applicationName: SITE_CONFIG.name,
+    manifest: "/site.webmanifest",
     authors: [{ name: SITE_CONFIG.name }],
     creator: SITE_CONFIG.name,
     publisher: SITE_CONFIG.name,
     category: "Restaurant software",
     keywords: mergedKeywords,
+    icons: {
+      icon: [
+        { url: "/favicon.ico" },
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+      shortcut: ["/favicon.ico"],
+    },
+    appleWebApp: {
+      capable: true,
+      title: SITE_CONFIG.name,
+      statusBarStyle: "default",
+    },
     alternates: {
       canonical,
       languages: {
