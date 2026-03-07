@@ -29,6 +29,12 @@ Gerekli degiskenler:
 - `RESEND_FROM_EMAIL`
 - `RESEND_TO_EMAIL`
 
+Opsiyonel, sadece teklif taleplerinin sunucu tarafindan Firestore'a da kaydedilmesi isteniyorsa:
+
+- `FIREBASE_ADMIN_PROJECT_ID`
+- `FIREBASE_ADMIN_CLIENT_EMAIL`
+- `FIREBASE_ADMIN_PRIVATE_KEY`
+
 ## Netlify Deploy
 
 Bu repo `netlify.toml` ile Netlify deploy icin hazirlandi.
@@ -45,3 +51,5 @@ Netlify site ayarlari icinde Environment Variables alanina `.env.example` dosyas
 Form gonderimlerinin calismasi icin `RESEND_API_KEY` tanimli olmalidir.
 
 `RESEND_FROM_EMAIL` degerinin Resend uzerinde dogrulanmis bir domain kullanmasi gerekir. `onboarding@resend.dev` yalnizca hesap sahibinin kendi adresine test maili gonderebilir; canli iletisim ve teklif formlari icin yeterli degildir.
+
+Teklif formu kullanici tarafindan Firestore'a yazmaz. Firestore kaydinin da otomatik olusmasi isteniyorsa Netlify tarafina `FIREBASE_ADMIN_PROJECT_ID`, `FIREBASE_ADMIN_CLIENT_EMAIL` ve `FIREBASE_ADMIN_PRIVATE_KEY` degerleri eklenmelidir.

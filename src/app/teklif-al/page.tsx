@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import {
   CheckCircle,
   ArrowRight,
@@ -423,11 +421,6 @@ export default function TeklifAlPage() {
     setPhoneErr("");
     setLoading(true);
     try {
-      await addDoc(collection(db, "teklifTalepleri"), {
-        ...data,
-        status: "yeni",
-        createdAt: Timestamp.now(),
-      });
       const response = await fetch("/api/teklif", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

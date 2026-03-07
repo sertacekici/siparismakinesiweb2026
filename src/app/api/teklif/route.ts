@@ -1,5 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendTransactionalEmail } from "@/lib/email";
+import { FieldValue } from "firebase-admin/firestore";
+import { getAdminDb } from "@/lib/firebase-admin";
+
+async function saveQuoteRequest(body: Record<string, unknown>) {
+  const adminDb = getAdminDb();
+
+  if (!adminDb) {
+    return false;
+  }
+
+  await adminDb.collection("teklifTalepleri").add({
+    ...body,
+    status: "yeni",
+    createdAt: FieldValue.serverTimestamp(),
+  });
+
+  return true;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -118,6 +136,12 @@ export async function POST(req: NextRequest) {
       subject: `Yeni Teklif Talebi — ${isletmeAdi} (${adSoyad})`,
       html,
     });
+
+    try {
+      await saveQuoteRequest(body);
+    } catch (firestoreError) {
+      console.warn("Teklif Firestore kaydi olusturulamadi:", firestoreError);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
