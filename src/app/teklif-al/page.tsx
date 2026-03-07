@@ -91,7 +91,7 @@ const emptyForm: FormData = {
   uzaktanTakip: "",
   subeSayisi: "",
   qrSiparis: "",
-  kuryeTakipSistemi: "",
+  kuryeTakipSistemi: "standart",
   adSoyad: "",
   isletmeAdi: "",
   telefon: "",
@@ -298,7 +298,7 @@ function CountSelect({
   label,
   data,
   set,
-  max = 20,
+  max = 10,
 }: {
   field: keyof FormData;
   label?: string;
@@ -307,6 +307,7 @@ function CountSelect({
   max?: number;
 }) {
   const options = Array.from({ length: max }, (_, index) => String(index + 1));
+  const selectedValue = (data[field] as string) || "1";
 
   return (
     <div>
@@ -316,13 +317,10 @@ function CountSelect({
         </label>
       )}
       <select
-        value={data[field] as string}
+        value={selectedValue}
         onChange={(e) => set(field, e.target.value)}
         className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
       >
-        <option value="" disabled>
-          Seciniz
-        </option>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
@@ -703,7 +701,6 @@ export default function TeklifAlPage() {
               data={data} set={set}
               field="markaSayisi"
               label="Kaç adet markanız var?"
-              max={20}
             />
           </Q>
         );
@@ -902,7 +899,7 @@ export default function TeklifAlPage() {
             title="Kaç adet şubeniz var?"
             icon={<Building2 className="h-5 w-5 text-primary" />}
           >
-            <CountSelect data={data} set={set} field="subeSayisi" max={20} />
+            <CountSelect data={data} set={set} field="subeSayisi" />
           </Q>
         );
 
