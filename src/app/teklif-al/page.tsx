@@ -62,6 +62,8 @@ interface FormData {
   adSoyad: string;
   isletmeAdi: string;
   telefon: string;
+  not: string;
+  pazarlamaOnayi: boolean;
 }
 
 const emptyForm: FormData = {
@@ -93,6 +95,8 @@ const emptyForm: FormData = {
   adSoyad: "",
   isletmeAdi: "",
   telefon: "",
+  not: "",
+  pazarlamaOnayi: false,
 };
 
 const PLATFORMS = ["Yemek Sepeti", "Getir", "Trendyol", "Migros Yemek"];
@@ -289,6 +293,46 @@ function NumInput({
   );
 }
 
+function CountSelect({
+  field,
+  label,
+  data,
+  set,
+  max = 20,
+}: {
+  field: keyof FormData;
+  label?: string;
+  data: FormData;
+  set: (field: keyof FormData, value: string, autoAdvance?: boolean) => void;
+  max?: number;
+}) {
+  const options = Array.from({ length: max }, (_, index) => String(index + 1));
+
+  return (
+    <div>
+      {label && (
+        <label className="block text-sm font-medium text-secondary mb-1.5">
+          {label}
+        </label>
+      )}
+      <select
+        value={data[field] as string}
+        onChange={(e) => set(field, e.target.value)}
+        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+      >
+        <option value="" disabled>
+          Seciniz
+        </option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 /* ================================================================ */
 /*  Sayfa Bileşeni                                                  */
 /* ================================================================ */
@@ -397,7 +441,8 @@ export default function TeklifAlPage() {
         return (
           !!data.adSoyad.trim() &&
           !!data.isletmeAdi.trim() &&
-          isPhoneValid(data.telefon)
+          isPhoneValid(data.telefon) &&
+          data.pazarlamaOnayi
         );
       default:
         return false;
@@ -545,7 +590,7 @@ export default function TeklifAlPage() {
             title="Kaç adet sabit telefonunuz var?"
             icon={<PhoneCall className="h-5 w-5 text-primary" />}
           >
-            <NumInput data={data} set={set} field="sabitTelefonAdet" placeholder="Örn: 2" />
+            <CountSelect data={data} set={set} field="sabitTelefonAdet" />
           </Q>
         );
 
@@ -654,11 +699,11 @@ export default function TeklifAlPage() {
                 );
               })}
             </div>
-            <NumInput
+            <CountSelect
               data={data} set={set}
               field="markaSayisi"
-              placeholder="Örn: 1"
               label="Kaç adet markanız var?"
+              max={20}
             />
           </Q>
         );
@@ -687,7 +732,7 @@ export default function TeklifAlPage() {
             title="Kaç adet kurye çalışıyor?"
             icon={<Truck className="h-5 w-5 text-primary" />}
           >
-            <NumInput data={data} set={set} field="kuryeAdet" placeholder="Örn: 3" />
+            <CountSelect data={data} set={set} field="kuryeAdet" />
           </Q>
         );
 
@@ -798,7 +843,7 @@ export default function TeklifAlPage() {
             title="Kaç adet garson bilgisayarına ihtiyacınız var?"
             icon={<Monitor className="h-5 w-5 text-primary" />}
           >
-            <NumInput data={data} set={set} field="garsonBilgisayarAdet" placeholder="Örn: 2" />
+            <CountSelect data={data} set={set} field="garsonBilgisayarAdet" />
           </Q>
         );
 
@@ -809,7 +854,7 @@ export default function TeklifAlPage() {
             sub="Mutfak, bar, kasa gibi bölümler için gereken toplam yazıcı sayısı"
             icon={<Printer className="h-5 w-5 text-primary" />}
           >
-            <NumInput data={data} set={set} field="termalYaziciAdet" placeholder="Örn: 3" />
+            <CountSelect data={data} set={set} field="termalYaziciAdet" />
           </Q>
         );
 
@@ -857,7 +902,7 @@ export default function TeklifAlPage() {
             title="Kaç adet şubeniz var?"
             icon={<Building2 className="h-5 w-5 text-primary" />}
           >
-            <NumInput data={data} set={set} field="subeSayisi" placeholder="Örn: 1" />
+            <CountSelect data={data} set={set} field="subeSayisi" max={20} />
           </Q>
         );
 
@@ -988,6 +1033,43 @@ export default function TeklifAlPage() {
                     {phoneErr}
                   </p>
                 )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-secondary mb-1.5">
+                  Eklemek istediğiniz bir not var mı?
+                </label>
+                <textarea
+                  value={data.not}
+                  onChange={(e) => set("not", e.target.value)}
+                  placeholder="Varsa eklemek istediginiz notu yazabilirsiniz"
+                  rows={4}
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none"
+                />
+              </div>
+
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={data.pazarlamaOnayi}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        pazarlamaOnayi: e.target.checked,
+                      }))
+                    }
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/30"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-secondary">
+                      Verdiğim bilgilerin Adelsoft - Sipariş Makinesi tarafından satış ve pazarlama faaliyetlerinde kullanılabileceğini kabul ediyorum.
+                    </p>
+                    <p className="text-xs text-foreground/60 mt-1">
+                      Formu onaylayarak bu koşulu kabul etmiş sayılırsınız.
+                    </p>
+                  </div>
+                </label>
               </div>
             </div>
           </Q>

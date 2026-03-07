@@ -52,6 +52,8 @@ export async function POST(req: NextRequest) {
       adSoyad,
       isletmeAdi,
       telefon,
+      not,
+      pazarlamaOnayi,
     } = body;
 
     /* ---------- Telefon doğrulama ---------- */
@@ -87,6 +89,8 @@ export async function POST(req: NextRequest) {
           <tr style="background:#f9f9f9;"><td style="padding:6px 10px;font-weight:bold;">İşletme Adı:</td><td style="padding:6px 10px;">${isletmeAdi}</td></tr>
           <tr><td style="padding:6px 10px;font-weight:bold;">Cep Telefonu:</td><td style="padding:6px 10px;">${telefon}</td></tr>
           <tr style="background:#f9f9f9;"><td style="padding:6px 10px;font-weight:bold;">Çözüm Türü:</td><td style="padding:6px 10px;">${cozumLabel}</td></tr>
+          ${not ? `<tr><td style="padding:6px 10px;font-weight:bold;vertical-align:top;">Not:</td><td style="padding:6px 10px;white-space:pre-wrap;">${not}</td></tr>` : ""}
+          <tr style="background:#f9f9f9;"><td style="padding:6px 10px;font-weight:bold;vertical-align:top;">Pazarlama Onayı:</td><td style="padding:6px 10px;">${pazarlamaOnayi ? "Onay verdi" : "Onay vermedi"}</td></tr>
         </table>
 
         <h3 style="color:#333;">Ortak Bilgiler</h3>
