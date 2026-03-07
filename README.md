@@ -26,6 +26,8 @@ Gerekli degiskenler:
 - `NEXT_PUBLIC_FIREBASE_APP_ID`
 - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
 - `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+- `RESEND_TO_EMAIL`
 
 ## Netlify Deploy
 
@@ -41,3 +43,5 @@ Netlify site ayarlari icinde Environment Variables alanina `.env.example` dosyas
 `NEXT_PUBLIC_SITE_URL` degerini Netlify uzerindeki canli alan adiniz olacak sekilde ayarlayin.
 
 Form gonderimlerinin calismasi icin `RESEND_API_KEY` tanimli olmalidir.
+
+`RESEND_FROM_EMAIL` degerinin Resend uzerinde dogrulanmis bir domain kullanmasi gerekir. `onboarding@resend.dev` yalnizca hesap sahibinin kendi adresine test maili gonderebilir; canli iletisim ve teklif formlari icin yeterli degildir.

@@ -410,14 +410,27 @@ export default function TeklifAlPage() {
         status: "yeni",
         createdAt: Timestamp.now(),
       });
-      await fetch("/api/teklif", {
+      const response = await fetch("/api/teklif", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+
+      const payload = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          payload?.error || "Teklif e-postasi gonderilemedi. Lutfen tekrar deneyin."
+        );
+      }
+
       setDone(true);
-    } catch {
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Bir hata olustu. Lutfen tekrar deneyin."
+      );
     } finally {
       setLoading(false);
     }

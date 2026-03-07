@@ -52,10 +52,22 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error();
+
+      const payload = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        throw new Error(
+          payload?.error || "Bir hata oluştu. Lütfen tekrar deneyin."
+        );
+      }
+
       setSent(true);
-    } catch {
-      setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Bir hata oluştu. Lütfen tekrar deneyin."
+      );
     } finally {
       setSending(false);
     }

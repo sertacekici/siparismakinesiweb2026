@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendTransactionalEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -113,26 +113,22 @@ export async function POST(req: NextRequest) {
         <p style="color:#999;font-size:12px;margin-top:20px;">Bu e-posta siparismakinesi.com teklif formundan otomatik gönderilmiştir.</p>
       </div>`;
 
-    /* ---------- E-posta gönderimi (Resend) ---------- */
-    const resendKey = process.env.RESEND_API_KEY;
-
-    if (resendKey) {
-      const resend = new Resend(resendKey);
-      await resend.emails.send({
-        from: "Sipariş Makinesi Teklif <onboarding@resend.dev>",
-        to: "info@adelsoft.co.uk",
-        subject: `Yeni Teklif Talebi — ${isletmeAdi} (${adSoyad})`,
-        html,
-      });
-    } else {
-      console.warn("RESEND_API_KEY tanımlı değil. E-posta gönderilemedi.");
-    }
+    await sendTransactionalEmail({
+      fromName: "Sipariş Makinesi Teklif",
+      subject: `Yeni Teklif Talebi — ${isletmeAdi} (${adSoyad})`,
+      html,
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Teklif API hatası:", error);
     return NextResponse.json(
-      { error: "Teklif gönderilirken bir hata oluştu." },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Teklif gönderilirken bir hata oluştu.",
+      },
       { status: 500 }
     );
   }
