@@ -238,7 +238,7 @@ function OptGrid({
   field: keyof FormData;
   options: { value: string; label: string; desc?: string }[];
   data: FormData;
-  set: (field: keyof FormData, value: string) => void;
+  set: (field: keyof FormData, value: string, autoAdvance?: boolean) => void;
 }) {
   return (
     <div
@@ -252,7 +252,7 @@ function OptGrid({
           label={o.label}
           desc={o.desc}
           selected={data[field] === o.value}
-          onClick={() => set(field, o.value)}
+          onClick={() => set(field, o.value, options.length === 2)}
         />
       ))}
     </div>
@@ -270,7 +270,7 @@ function NumInput({
   placeholder: string;
   label?: string;
   data: FormData;
-  set: (field: keyof FormData, value: string) => void;
+  set: (field: keyof FormData, value: string, autoAdvance?: boolean) => void;
 }) {
   return (
     <div>
@@ -309,8 +309,26 @@ export default function TeklifAlPage() {
     steps.length > 1 ? Math.round((safeIdx / (steps.length - 1)) * 100) : 0;
 
   /* --- Veri güncelleme --- */
-  const set = (field: keyof FormData, value: string) =>
-    setData((p) => ({ ...p, [field]: value }));
+  const set = (
+    field: keyof FormData,
+    value: string,
+    autoAdvance = false
+  ) => {
+    if (!autoAdvance) {
+      setData((prev) => ({ ...prev, [field]: value }));
+      return;
+    }
+
+    const nextData = { ...data, [field]: value };
+    const nextSteps = buildSteps(nextData);
+    const currentIndex = nextSteps.indexOf(cur);
+
+    setData(nextData);
+
+    if (currentIndex >= 0 && currentIndex < nextSteps.length - 1) {
+      setStepIdx(currentIndex + 1);
+    }
+  };
 
   const setCozumTuru = (val: string) => {
     if (val !== data.cozumTuru) setData({ ...emptyForm, cozumTuru: val });
